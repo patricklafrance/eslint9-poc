@@ -1,0 +1,27 @@
+{
+    "name": "workspace-root",
+    "version": "0.0.0",
+    "description": "POC to test different ESLint 9 setup",
+    "private": true,
+    "type": "module",
+    "license": "Apache-2.0",
+    "scripts": {
+        "dev": "",
+        "build": "",
+        "clean": "pnpm -r --parallel --include-workspace-root exec pnpx rimraf dist .turbo .rslib node_modules/.cache",
+        "reset": "pnpm clean && pnpm run --sequential \"/^reset:.*/\"",
+        "reset:modules": "pnpm -r --parallel --include-workspace-root exec pnpx rimraf node_modules pnpm-lock.yaml",
+        "reset:templates": "cd templates/getting-started && pnpm reset:modules",
+        "list-outdated-deps": "pnpm outdated -r --format list",
+        "update-outdated-deps": "pnpm update -r --latest"
+    },
+    "devDependencies": {
+        "@workleap/typescript-configs": "3.0.4",
+        "typescript": "5.8.3"
+    },
+    "engines": {
+        "node": ">=22.0.0",
+        "pnpm": ">=9"
+    },
+    "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
+}

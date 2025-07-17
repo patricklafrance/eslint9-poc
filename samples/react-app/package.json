@@ -1,0 +1,28 @@
+{
+    "name": "@samples/react-app",
+    "version": "0.0.0",
+    "description": "Sample React application to test ESLint 9 rules",
+    "private": true,
+    "license": "Apache-2.0",
+    "type": "module",
+    "scripts": {
+        "dev": "rsbuild dev --config rsbuild.dev.ts",
+        "build": "rsbuild build --config rsbuild.build.ts",
+        "typecheck": "tsc"
+    },
+    "dependencies": {
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0"
+    },
+    "devDependencies": {
+        "@rsbuild/core": "1.4.6",
+        "@rspack/core": "1.4.6",
+        "@types/react": "19.1.8",
+        "@types/react-dom": "19.1.6",
+        "@workleap/browserslist-config": "2.0.4",
+        "@workleap/rsbuild-configs": "3.0.2",
+        "@workleap/typescript-configs": "3.0.4",
+        "browserslist": "4.25.1",
+        "typescript": "5.8.3"
+    }
+}

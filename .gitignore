@@ -1,0 +1,12 @@
+node_modules
+dist
+.pnpm-debug.log*
+.netlify
+.turbo
+.rslib
+.retype
+*.env.local
+
+# Mac
+.DS_Store
+*.pem
