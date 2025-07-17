@@ -9,9 +9,8 @@
         "dev": "",
         "build": "",
         "clean": "pnpm -r --parallel --include-workspace-root exec pnpx rimraf dist .turbo .rslib node_modules/.cache",
-        "reset": "pnpm clean && pnpm run --sequential \"/^reset:.*/\"",
+        "reset": "pnpm clean && pnpm reset:modules",
         "reset:modules": "pnpm -r --parallel --include-workspace-root exec pnpx rimraf node_modules pnpm-lock.yaml",
-        "reset:templates": "cd templates/getting-started && pnpm reset:modules",
         "list-outdated-deps": "pnpm outdated -r --format list",
         "update-outdated-deps": "pnpm update -r --latest"
     },
