@@ -1,3 +1,6 @@
+# TEST SCENARIO:
+# - Remove a mapping key and ESlint should show an error. Example: "script: pnpm build-cdn" -> ": pnpm build-cdn"
+
 trigger: none
 
 variables:
