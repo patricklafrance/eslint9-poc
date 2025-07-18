@@ -1,0 +1,30 @@
+trigger: none
+
+variables:
+- group: jira
+
+steps:
+- template: templates/setup.yml
+
+- script: pnpm build-internals
+  displayName: pnpm build-internals
+
+- script: pnpm lint
+  displayName: pnpm lint
+
+- script: pnpm build-cdn
+  displayName: pnpm build-cdn
+
+- script: pnpm build-pkg
+  displayName: pnpm build-pkg
+
+# Skipping for now as this is already tested by Netlify preview deploys and the smoke tests.
+# - script: pnpm build-samples
+#   displayName: pnpm build-samples
+
+# Skipping for now as this is already tested by Chromatic.
+# - script: pnpm build-storybook
+#   displayName: pnpm build-storybook
+
+- script: pnpm test
+  displayName: pnpm test
