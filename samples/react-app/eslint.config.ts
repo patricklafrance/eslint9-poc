@@ -4,6 +4,8 @@ import vitestPlugin from "@vitest/eslint-plugin";
 import importPlugin from "eslint-plugin-import";
 import jestPlugin from "eslint-plugin-jest";
 import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
+import * as mdxPlugin from "eslint-plugin-mdx";
+import packageJsonPlugin from "eslint-plugin-package-json";
 import reactPlugin from "eslint-plugin-react";
 import reactHookPlugin from "eslint-plugin-react-hooks";
 import { defineConfig, globalIgnores } from "eslint/config";
@@ -319,8 +321,8 @@ export default defineConfig([
         // -> Jest
 
         files: [
-            "*.test.[jt]s?(x)",
-            "*-test.[jt]s?(x)",
+            "**/*.test.[jt]s?(x)",
+            "**/*-test.[jt]s?(x)",
             "**/__tests__/*.[jt]s?(x)",
             "**/test.[jt]s?(x)"
         ],
@@ -352,8 +354,8 @@ export default defineConfig([
         // -> Vitest
 
         files: [
-            "*.test.[jt]s?(x)",
-            "*-test.[jt]s?(x)",
+            "**/*.test.[jt]s?(x)",
+            "**/*-test.[jt]s?(x)",
             "**/__tests__/*.[jt]s?(x)",
             "**/test.[jt]s?(x)"
         ],
@@ -396,6 +398,40 @@ export default defineConfig([
             // This rule ensures that all media elements have a <track> for captions.
             // Since we don't use captions, we are disabling this rule.
             "jsx-a11y/media-has-caption": "off"
+        }
+    },
+    {
+        // -> MSX
+
+        files: ["**/*.mdx"],
+        extends: [
+            mdxPlugin.configs.flat
+        ]
+    },
+    {
+        // package.json
+
+        files: ["**/package.json"],
+        extends: [
+            packageJsonPlugin.configs.recommended
+        ],
+        rules: {
+            "package-json/order-properties": "off",
+            "package-json/prefer-repository-shorthand": "off",
+            "package-json/sort-collections": [
+                "error",
+                [
+                    // Do not sort "scripts".
+                    "devDependencies",
+                    "dependencies",
+                    "peerDependencies",
+                    "config"
+                ]
+            ],
+            // Doesn't support "workspace:*" at the moment.
+            "package-json/valid-package-def": "off",
+            // I am not sure why, this rule is triggering errors for valid paths.
+            "package-json/valid-repository-directory": "off"
         }
     }
 ]);
