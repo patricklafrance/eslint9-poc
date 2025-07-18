@@ -8,13 +8,15 @@ import * as mdxPlugin from "eslint-plugin-mdx";
 import packageJsonPlugin from "eslint-plugin-package-json";
 import reactPlugin from "eslint-plugin-react";
 import reactHookPlugin from "eslint-plugin-react-hooks";
+import storybookPlugin from "eslint-plugin-storybook";
+import testingLibraryPlugin from "eslint-plugin-testing-library";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
     // node_modules folder is ignored by default
-    globalIgnores(["dist"]),
+    globalIgnores(["dist", "!.storybook"]),
     {
         // -> CORE
 
@@ -367,6 +369,31 @@ export default defineConfig([
         }
     },
     {
+        // -> Testing library - React files
+
+        files: [
+            "**/*.test.[jt]sx",
+            "**/*-test.[jt]sx",
+            "**/__tests__/*.[jt]sx",
+            "**/test.[jt]sx"
+        ],
+        extends: [
+            testingLibraryPlugin.configs["flat/react"]
+        ]
+    },
+    {
+        // -> Testing library - Non-React files
+        files: [
+            "**/*.test.[jt]s",
+            "**/*-test.[jt]s",
+            "**/__tests__/*.[jt]s",
+            "**/test.[jt]s"
+        ],
+        extends: [
+            testingLibraryPlugin.configs["flat/dom"]
+        ]
+    },
+    {
         // -> JSX a11y
 
         files: ["**/*.[jt]s?(x)", "**/*.[cm]js"],
@@ -401,7 +428,7 @@ export default defineConfig([
         }
     },
     {
-        // -> MSX
+        // -> MDX
 
         files: ["**/*.mdx"],
         extends: [
@@ -409,7 +436,7 @@ export default defineConfig([
         ]
     },
     {
-        // package.json
+        // -> package.json
 
         files: ["**/package.json"],
         extends: [
@@ -432,6 +459,30 @@ export default defineConfig([
             "package-json/valid-package-def": "off",
             // I am not sure why, this rule is triggering errors for valid paths.
             "package-json/valid-repository-directory": "off"
+        }
+    },
+    {
+        // -> Storybook stories
+
+        files: ["**/*.(stories|storybook|story|chroma).[jt]s?(x)"],
+        extends: [
+            // @ts-expect-error the types are broken and think there's a ".default" to add.
+            storybookPlugin.configs["flat/recommended"],
+            // @ts-expect-error the types are broken and think there's a ".default" to add.
+            storybookPlugin.configs["flat/csf"],
+            // @ts-expect-error the types are broken and think there's a ".default" to add.
+            storybookPlugin.configs["flat/csf-strict"]
+        ]
+    },
+    {
+        // -> Storybook main
+
+        files: [
+            "**/.storybook/main.@(js|cjs|mjs|ts)",
+            "**/storybook/main.@(js|cjs|mjs|ts)"
+        ],
+        rules: {
+            "storybook/no-uninstalled-addons": "warn"
         }
     }
 ]);
