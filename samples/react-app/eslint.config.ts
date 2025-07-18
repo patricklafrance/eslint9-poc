@@ -1,6 +1,9 @@
 import js from "@eslint/js";
 import stylisticPlugin from "@stylistic/eslint-plugin";
+import vitestPlugin from "@vitest/eslint-plugin";
 import importPlugin from "eslint-plugin-import";
+import jestPlugin from "eslint-plugin-jest";
+import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
 import reactPlugin from "eslint-plugin-react";
 import reactHookPlugin from "eslint-plugin-react-hooks";
 import { defineConfig, globalIgnores } from "eslint/config";
@@ -171,12 +174,12 @@ export default defineConfig([
         },
         extends: [
             js.configs.recommended,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            tseslint.configs.recommended as any
+            // @ts-expect-error types don't match, even though objects are the same shape.
+            tseslint.configs.recommended
         ],
         languageOptions: {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            parser: tseslint.parser as any,
+            // @ts-expect-error types don't match, even though objects are the same shape.
+            parser: tseslint.parser,
             parserOptions: {
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname
@@ -310,6 +313,89 @@ export default defineConfig([
                 { maximum: 1, when: "multiline" }
             ],
             "react/jsx-curly-spacing": ["warn", { children: true, when: "never" }]
+        }
+    },
+    {
+        // -> Jest
+
+        files: [
+            "*.test.[jt]s?(x)",
+            "*-test.[jt]s?(x)",
+            "**/__tests__/*.[jt]s?(x)",
+            "**/test.[jt]s?(x)"
+        ],
+        extends: [
+            jestPlugin.configs["flat/recommended"]
+        ],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.es2024,
+                ...globals.node,
+                ...globals.commonjs,
+                ...globals.jest
+            }
+        },
+        settings: {
+            jest: {
+                version: "detect"
+            }
+        },
+        rules: {
+            // Prefer spies to allow for automatic restoration.
+            "jest/prefer-spy-on": "error",
+            // Gives better failure messages for array checks.
+            "jest/prefer-to-contain": "error"
+        }
+    },
+    {
+        // -> Vitest
+
+        files: [
+            "*.test.[jt]s?(x)",
+            "*-test.[jt]s?(x)",
+            "**/__tests__/*.[jt]s?(x)",
+            "**/test.[jt]s?(x)"
+        ],
+        extends: [
+            vitestPlugin.configs.recommended
+        ],
+        rules: {
+            "@vitest/no-commented-out-tests": "off"
+        }
+    },
+    {
+        // -> JSX a11y
+
+        files: ["**/*.[jt]s?(x)", "**/*.[cm]js"],
+        extends: [
+            // @ts-expect-error types don't match, even though objects are the same shape.
+            jsxA11yPlugin.flatConfigs.recommended
+        ],
+        languageOptions: {
+            parserOptions: {
+                ecmaFeatures: {
+                    jsx: true
+                }
+            }
+        },
+        rules: {
+            // There is a really good article that describes the issues with autoFocus and why it should be avoided:
+            // https://brucelawson.co.uk/2009/the-accessibility-of-html-5-autofocus/
+            // However, this issue is with screen readers and not with keyboard navigation.
+            // In Workleap, we use autoFocus in a lot of places to improve the user experience.
+            // Therefore, we are disabling this rule.
+            "jsx-a11y/no-autofocus": "off",
+
+            // This rule ensures that all labels have an associated control that they are labeling.
+            // However, this rule causes a lot of false positive, since our current implementation of our company's design system
+            // does not use the "for" attribute in the label element and automatically add it inside Fields.
+            // Therefore, we are disabling this rule.
+            "jsx-a11y/label-has-associated-control:": "off",
+
+            // This rule ensures that all media elements have a <track> for captions.
+            // Since we don't use captions, we are disabling this rule.
+            "jsx-a11y/media-has-caption": "off"
         }
     }
 ]);
