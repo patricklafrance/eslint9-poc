@@ -10,17 +10,21 @@ import reactPlugin from "eslint-plugin-react";
 import reactHookPlugin from "eslint-plugin-react-hooks";
 import storybookPlugin from "eslint-plugin-storybook";
 import testingLibraryPlugin from "eslint-plugin-testing-library";
+import yamlPlugin from "eslint-plugin-yaml";
 import { defineConfig, globalIgnores } from "eslint/config";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
 export default defineConfig([
     // node_modules folder is ignored by default
-    globalIgnores(["dist", "!.storybook"]),
+    globalIgnores([
+        "dist",
+        "!.storybook"
+    ]),
     {
         // -> CORE
 
-        files: ["**/*.[jt]s?(x)", "**/*.[cm]js"],
+        files: ["**/*.{js,jsx,ts,tsx,cjs,mjs}"],
         plugins: {
             js,
             import: importPlugin
@@ -172,7 +176,7 @@ export default defineConfig([
     {
         // -> TypeScript
 
-        files: ["**/*.ts?(x)"],
+        files: ["**/*.{ts,tsx}"],
         plugins: {
             "@stylistic": stylisticPlugin
         },
@@ -323,10 +327,10 @@ export default defineConfig([
         // -> Jest
 
         files: [
-            "**/*.test.[jt]s?(x)",
-            "**/*-test.[jt]s?(x)",
-            "**/__tests__/*.[jt]s?(x)",
-            "**/test.[jt]s?(x)"
+            "**/*.test.{js,jsx,ts,tsx}",
+            "**/*-test.{js,jsx,ts,tsx}",
+            "**/__tests__/*.{js,jsx,ts,tsx}",
+            "**/test.{js,jsx,ts,tsx}"
         ],
         extends: [
             jestPlugin.configs["flat/recommended"]
@@ -356,10 +360,10 @@ export default defineConfig([
         // -> Vitest
 
         files: [
-            "**/*.test.[jt]s?(x)",
-            "**/*-test.[jt]s?(x)",
-            "**/__tests__/*.[jt]s?(x)",
-            "**/test.[jt]s?(x)"
+            "**/*.test.{js,jsx,ts,tsx}",
+            "**/*-test.{js,jsx,ts,tsx}",
+            "**/__tests__/*.{js,jsx,ts,tsx}",
+            "**/test.{js,jsx,ts,tsx}"
         ],
         extends: [
             vitestPlugin.configs.recommended
@@ -396,7 +400,7 @@ export default defineConfig([
     {
         // -> JSX a11y
 
-        files: ["**/*.[jt]s?(x)", "**/*.[cm]js"],
+        files: ["**/*.{js,ts,jsx,tsx,cjs,mjs}"],
         extends: [
             // @ts-expect-error types don't match, even though objects are the same shape.
             jsxA11yPlugin.flatConfigs.recommended
@@ -464,7 +468,7 @@ export default defineConfig([
     {
         // -> Storybook stories
 
-        files: ["**/*.(stories|storybook|story|chroma).[jt]s?(x)"],
+        files: ["**/*.{stories,storybook,story,chroma}.{js,ts,jsx,tsx}"],
         extends: [
             // @ts-expect-error the types are broken and think there's a ".default" to add.
             storybookPlugin.configs["flat/recommended"],
@@ -477,12 +481,20 @@ export default defineConfig([
     {
         // -> Storybook main
 
-        files: [
-            "**/.storybook/main.@(js|cjs|mjs|ts)",
-            "**/storybook/main.@(js|cjs|mjs|ts)"
-        ],
+        files: ["**/{.storybook,storybook}/main.@(js|cjs|mjs|ts)"],
         rules: {
             "storybook/no-uninstalled-addons": "warn"
         }
+    },
+    {
+        // -> YAML
+
+        files: [
+            "**/*.yaml",
+            "**/*.yml"
+        ],
+        extends: [
+            yamlPlugin.configs.recommended
+        ]
     }
 ]);
