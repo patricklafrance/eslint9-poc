@@ -1,0 +1,527 @@
+import js from "@eslint/js";
+import stylisticPlugin from "@stylistic/eslint-plugin";
+import vitestPlugin from "@vitest/eslint-plugin";
+import importPlugin from "eslint-plugin-import";
+import jestPlugin from "eslint-plugin-jest";
+import jsxA11yPlugin from "eslint-plugin-jsx-a11y";
+// import * as mdxPlugin from "eslint-plugin-mdx";
+import packageJsonPlugin from "eslint-plugin-package-json";
+import reactPlugin from "eslint-plugin-react";
+import reactHooksPlugin from "eslint-plugin-react-hooks";
+import storybookPlugin from "eslint-plugin-storybook";
+import testingLibraryPlugin from "eslint-plugin-testing-library";
+import yamlPlugin from "eslint-plugin-yaml";
+import { defineConfig, globalIgnores } from "eslint/config";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+
+export default defineConfig([
+    // node_modules folder is ignored by default
+    globalIgnores([
+        "dist",
+        "!.storybook"
+    ]),
+    {
+        // -> CORE
+
+        files: ["**/*.{js,jsx,ts,tsx,cjs,mjs}"],
+        plugins: {
+            js,
+            import: importPlugin
+        },
+        extends: [
+            js.configs.recommended
+        ],
+        languageOptions: {
+            ecmaVersion: "latest",
+            sourceType: "module",
+            globals: {
+                ...globals.browser,
+                ...globals.es2024,
+                ...globals.node,
+                ...globals.commonjs
+            }
+        },
+        rules: {
+            // @eslint/js/recommended overwrite
+            "no-cond-assign": ["error", "except-parens"],
+            "no-labels": ["warn", { allowLoop: true, allowSwitch: false }],
+            "no-prototype-builtins": "off",
+
+            // https://eslint.org/docs/rules
+            // Extra eslint rules
+
+            // Possible Problems
+            "array-callback-return": "error",
+            "no-self-compare": "error",
+            "no-template-curly-in-string": "error",
+            "no-use-before-define": [
+                "error",
+                {
+                    functions: false,
+                    classes: false,
+                    variables: false
+                }
+            ],
+
+            // Suggestions
+            "no-array-constructor": "warn",
+            "no-caller": "warn",
+            "no-eval": "warn",
+            "no-extend-native": "warn",
+            "no-extra-bind": "warn",
+            "no-extra-label": "warn",
+            "no-implied-eval": "warn",
+            "no-iterator": "warn",
+            "no-label-var": "warn",
+            "no-lone-blocks": "warn",
+            "no-loop-func": "warn",
+            "no-multi-str": "warn",
+            "no-new-func": "warn",
+            "no-new-object": "warn",
+            "no-new-wrappers": "warn",
+            "no-octal-escape": "warn",
+            "no-useless-computed-key": "warn",
+            "no-useless-concat": "warn",
+            "no-useless-constructor": "warn",
+            "no-script-url": "warn",
+            "no-sequences": "warn",
+            "no-throw-literal": "warn",
+            "prefer-const": "warn",
+            "no-var": "warn",
+            curly: "warn",
+            "no-shadow": "warn",
+            "no-restricted-properties": "warn",
+            "no-unneeded-ternary": "warn",
+            "no-param-reassign": "warn",
+            eqeqeq: ["warn", "smart"],
+            "no-mixed-operators": [
+                "warn",
+                {
+                    groups: [
+                        ["&", "|", "^", "~", "<<", ">>", ">>>"],
+                        ["==", "!=", "===", "!==", ">", ">=", "<", "<="],
+                        ["&&", "||"],
+                        ["in", "instanceof"]
+                    ],
+                    allowSamePrecedence: false
+                }
+            ],
+            "no-restricted-syntax": ["error", "WithStatement"],
+            "no-restricted-globals": ["error"],
+            "no-useless-rename": [
+                "warn",
+                {
+                    ignoreDestructuring: false,
+                    ignoreImport: false,
+                    ignoreExport: false
+                }
+            ],
+            strict: ["warn", "never"],
+            "no-unused-expressions": [
+                "error",
+                {
+                    allowShortCircuit: true,
+                    allowTernary: true,
+                    allowTaggedTemplates: true
+                }
+            ],
+
+            // Layout & Formatting
+            // "no-native-reassign": "warn", // deprecated replaced by no-global-assign, deja ds recommended
+            // "no-negated-in-lhs": "warn", // deprecated replaced by no-unsafe-negation, deja ds recommended
+            "padding-line-between-statements": [
+                "warn",
+                { blankLine: "always", prev: "*", next: "return" }
+            ],
+
+            "rest-spread-spacing": ["warn", "never"],
+            "unicode-bom": ["warn", "never"],
+            "comma-spacing": ["warn", { before: false, after: true }],
+            "keyword-spacing": ["warn", { before: true, after: true }],
+            "arrow-spacing": ["warn", { before: true, after: true }],
+            "space-before-blocks": ["warn", "always"],
+            "space-in-parens": ["warn", "never"],
+            "padded-blocks": ["warn", "never"],
+            "brace-style": ["warn", "1tbs", { allowSingleLine: true }],
+            "new-parens": "warn",
+            "no-whitespace-before-property": "warn",
+            "no-multi-spaces": "warn",
+            "no-multiple-empty-lines": "warn",
+            "space-infix-ops": "warn",
+            "max-len": ["warn", { tabWidth: 4, code: 300 }],
+            indent: [
+                "warn",
+                4,
+                {
+                    SwitchCase: 1,
+                    CallExpression: { arguments: "first" }
+                }
+            ],
+            semi: ["warn", "always"],
+            quotes: ["warn", "double"],
+            "comma-dangle": ["warn", "never"],
+            "object-curly-spacing": ["warn", "always"],
+            "dot-location": ["warn", "property"],
+            "arrow-parens": ["warn", "as-needed"],
+
+            // https://github.com/import-js/eslint-plugin-import/tree/main/docs/rules
+            "import/no-amd": "error",
+            "import/no-webpack-loader-syntax": "error",
+            "import/no-self-import": "error",
+            "import/newline-after-import": "warn",
+            "import/no-duplicates": "warn"
+        }
+    },
+    {
+        // -> TypeScript
+
+        files: ["**/*.{ts,tsx}"],
+        plugins: {
+            "@stylistic": stylisticPlugin
+        },
+        extends: [
+            js.configs.recommended,
+            tseslint.configs.recommended
+        ],
+        languageOptions: {
+            parser: tseslint.parser,
+            parserOptions: {
+                projectService: true,
+                tsconfigRootDir: import.meta.dirname
+            }
+        },
+        rules: {
+            // @typescript-eslint/recommended disables
+            "@typescript-eslint/no-non-null-assertion": "off",
+            "@typescript-eslint/no-empty-object-type": ["error", { allowInterfaces: "with-single-extends", allowObjectTypes: "never" }],
+
+            // Additional rules we want
+            "@typescript-eslint/consistent-type-definitions": "warn",
+            "@typescript-eslint/explicit-member-accessibility": ["warn", { accessibility: "no-public" }],
+            "@typescript-eslint/method-signature-style": "warn",
+            "comma-dangle":"off",
+            "no-dupe-class-members":"off",
+            "@typescript-eslint/no-dupe-class-members":"error",
+            "no-loop-func":"off",
+            "@typescript-eslint/no-loop-func":"warn",
+            "no-shadow":"off",
+            "@typescript-eslint/no-shadow":"warn",
+            "no-unused-expressions":"off",
+            "@typescript-eslint/no-unused-expressions": [
+                "error",
+                {
+                    allowShortCircuit: true,
+                    allowTernary: true,
+                    allowTaggedTemplates: true
+                }
+            ],
+            "no-use-before-define":"off",
+            "no-useless-constructor":"off",
+            "@typescript-eslint/no-useless-constructor":"warn",
+            "object-curly-spacing":"off",
+            "quotes":"off",
+            "@stylistic/quotes": ["warn", "double"],
+            "@typescript-eslint/no-import-type-side-effects": "warn",
+            "@typescript-eslint/consistent-type-imports": [
+                "warn",
+                {
+                    "prefer": "type-imports",
+                    "disallowTypeAnnotations": true,
+                    "fixStyle": "inline-type-imports"
+                }
+            ],
+
+            "@stylistic/member-delimiter-style": "warn",
+            "@stylistic/comma-dangle": ["warn", "never"],
+            "indent":"off",
+            "@stylistic/indent": [
+                "warn",
+                4,
+                {
+                    SwitchCase: 1,
+                    CallExpression: { arguments: "first" }
+                }
+            ],
+            "@stylistic/object-curly-spacing": ["warn", "always"],
+            "semi":"off",
+            "@stylistic/semi": ["warn", "always"]
+        }
+    },
+    {
+        // -> React
+
+        files: ["**/*.[jt]sx"],
+        extends: [
+            reactPlugin.configs.flat.recommended,
+            // @ts-expect-error the types are broken and think there's a ".default" to add.
+            reactHooksPlugin.configs.flat["recommended-latest"]
+        ],
+        languageOptions: {
+            parserOptions: {
+                ecmaFeatures: {
+                    jsx: true
+                }
+            }
+        },
+        settings: {
+            react: {
+                version: "detect"
+            }
+        },
+        rules: {
+            // https://eslint.org/docs/rules
+            "jsx-quotes": ["warn", "prefer-double"],
+
+            // react/recommended overrides
+            "react/jsx-no-duplicate-props": ["warn", { ignoreCase: true }],
+            "react/jsx-no-undef": ["warn", { allowGlobals: true }],
+
+            // react/recommended disables
+            "react/react-in-jsx-scope": "off",
+            "react/display-name": "off",
+            "react/no-unescaped-entities": "off",
+            "react/prop-types": "off",
+            "react/jsx-key": "off",
+
+            // extra react rules
+            "react/forbid-foreign-prop-types": ["warn", { allowInPropTypes: true }],
+            "react/jsx-pascal-case": [
+                "warn",
+                {
+                    allowAllCaps: true,
+                    ignore: []
+                }
+            ],
+            "react/no-typos": "error",
+            "react/style-prop-object": "warn",
+            "react/button-has-type": "warn",
+            "react/destructuring-assignment": [
+                "warn",
+                "always",
+                { ignoreClassFields: true }
+            ],
+            "react/jsx-boolean-value": ["warn", "never"],
+            "react/default-props-match-prop-types": "warn",
+            "react/no-unused-state": "warn",
+            "react/no-array-index-key": "warn",
+            "react/no-access-state-in-setstate": "warn",
+            "react/jsx-filename-extension": ["warn", { "extensions": [".jsx", ".tsx"] }],
+            "react/jsx-curly-brace-presence": "warn",
+            "react/no-unused-prop-types": [
+                "warn",
+                { customValidators: [], skipShapeProps: true }
+            ],
+
+            "react/jsx-closing-bracket-location": [1, "line-aligned"],
+            "react/jsx-tag-spacing": ["warn", { beforeSelfClosing: "always" }],
+            "react/jsx-max-props-per-line": [
+                "warn",
+                { maximum: 1, when: "multiline" }
+            ],
+            "react/jsx-curly-spacing": ["warn", { children: true, when: "never" }]
+        }
+    },
+    {
+        // -> Jest
+
+        files: [
+            "**/*.test.{js,jsx,ts,tsx}",
+            "**/*-test.{js,jsx,ts,tsx}",
+            "**/__tests__/*.{js,jsx,ts,tsx}",
+            "**/test.{js,jsx,ts,tsx}"
+        ],
+        extends: [
+            jestPlugin.configs["flat/recommended"]
+        ],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.es2024,
+                ...globals.node,
+                ...globals.commonjs,
+                ...globals.jest
+            }
+        },
+        settings: {
+            jest: {
+                version: "detect"
+            }
+        },
+        rules: {
+            // Prefer spies to allow for automatic restoration.
+            "jest/prefer-spy-on": "error",
+            // Gives better failure messages for array checks.
+            "jest/prefer-to-contain": "error"
+        }
+    },
+    // Waiting for defineConfig support: https://github.com/vitest-dev/eslint-plugin-vitest/issues/771
+    {
+        // -> Vitest
+
+        files: [
+            "**/*.test.{js,jsx,ts,tsx}",
+            "**/*-test.{js,jsx,ts,tsx}",
+            "**/__tests__/*.{js,jsx,ts,tsx}",
+            "**/test.{js,jsx,ts,tsx}"
+        ],
+        plugins: {
+            // @ts-expect-error Typing errors, temporary until defineConfig is supported.
+            vitest: vitestPlugin
+        },
+        // extends: [
+        //     vitestPlugin.configs.recommended
+        // ],
+        rules: {
+            ...vitestPlugin.configs.recommended.rules,
+            "@vitest/no-commented-out-tests": "off"
+        }
+    },
+    {
+        // -> Testing library - React files
+
+        files: [
+            "**/*.test.[jt]sx",
+            "**/*-test.[jt]sx",
+            "**/__tests__/*.[jt]sx",
+            "**/test.[jt]sx"
+        ],
+        extends: [
+            testingLibraryPlugin.configs["flat/react"]
+        ]
+    },
+    {
+        // -> Testing library - Non-React files
+
+        files: [
+            "**/*.test.[jt]s",
+            "**/*-test.[jt]s",
+            "**/__tests__/*.[jt]s",
+            "**/test.[jt]s"
+        ],
+        extends: [
+            testingLibraryPlugin.configs["flat/dom"]
+        ]
+    },
+    {
+        // -> JSX a11y
+
+        files: ["**/*.{js,ts,jsx,tsx,cjs,mjs}"],
+        extends: [
+            // // @ts-expect-error types don't match, even though objects are the same shape.
+            jsxA11yPlugin.flatConfigs.recommended
+        ],
+        languageOptions: {
+            parserOptions: {
+                ecmaFeatures: {
+                    jsx: true
+                }
+            }
+        },
+        rules: {
+            // There is a really good article that describes the issues with autoFocus and why it should be avoided:
+            // https://brucelawson.co.uk/2009/the-accessibility-of-html-5-autofocus/
+            // However, this issue is with screen readers and not with keyboard navigation.
+            // In Workleap, we use autoFocus in a lot of places to improve the user experience.
+            // Therefore, we are disabling this rule.
+            "jsx-a11y/no-autofocus": "off",
+
+            // This rule ensures that all labels have an associated control that they are labeling.
+            // However, this rule causes a lot of false positive, since our current implementation of our company's design system
+            // does not use the "for" attribute in the label element and automatically add it inside Fields.
+            // Therefore, we are disabling this rule.
+            "jsx-a11y/label-has-associated-control:": "off",
+
+            // This rule ensures that all media elements have a <track> for captions.
+            // Since we don't use captions, we are disabling this rule.
+            "jsx-a11y/media-has-caption": "off"
+        }
+    },
+    // Support for defineConfigs / extends is not great at the moment
+    // and we get a runtime error: TypeError: ignoreCheckCache.get(...) is not a function
+    // {
+    //     // -> MDX
+
+    //     files: ["**/*.mdx"],
+    //     extends: [
+    //         mdxPlugin.configs.flat
+    //         // mdxPlugin.configs.flatCodeBlocks
+    //     ],
+    //     // languageOptions: {
+    //     //     parserOptions: {
+    //     //         project: undefined,
+    //     //         allowDefaultProject: true
+    //     //     }
+    //     // },
+    //     processor: mdxPlugin.createRemarkProcessor({
+    //         lintCodeBlocks: true,
+    //         ignoreRemarkConfig: true
+    //     })
+    // },
+    // {
+    //     // -> MDX - Code blocks
+
+    //     files: ["**/*.mdx/*.{js,jsx,ts,tsx}"],
+    //     extends: [
+    //         mdxPlugin.configs.flatCodeBlocks
+    //     ]
+    // },
+    {
+        // -> package.json
+
+        files: ["**/package.json"],
+        extends: [
+            packageJsonPlugin.configs.recommended
+        ],
+        rules: {
+            "package-json/order-properties": "off",
+            "package-json/prefer-repository-shorthand": "off",
+            "package-json/sort-collections": [
+                "error",
+                [
+                    // Do not sort "scripts".
+                    "devDependencies",
+                    "dependencies",
+                    "peerDependencies",
+                    "config"
+                ]
+            ],
+            // Doesn't support "workspace:*" at the moment.
+            "package-json/valid-package-def": "off",
+            // I am not sure why, this rule is triggering errors for valid paths.
+            "package-json/valid-repository-directory": "off"
+        }
+    },
+    {
+        // -> Storybook stories
+
+        files: ["**/*.{stories,storybook,story,chroma}.{js,ts,jsx,tsx}"],
+        extends: [
+            // @ts-expect-error the types are broken and think there's a ".default" to add.
+            storybookPlugin.configs["flat/recommended"],
+            // @ts-expect-error the types are broken and think there's a ".default" to add.
+            storybookPlugin.configs["flat/csf"],
+            // @ts-expect-error the types are broken and think there's a ".default" to add.
+            storybookPlugin.configs["flat/csf-strict"]
+        ]
+    },
+    {
+        // -> Storybook main
+
+        files: ["**/{.storybook,storybook}/main.@(js|cjs|mjs|ts)"],
+        rules: {
+            "storybook/no-uninstalled-addons": "warn"
+        }
+    },
+    {
+        // -> YAML
+
+        files: [
+            "**/*.yaml",
+            "**/*.yml"
+        ],
+        extends: [
+            yamlPlugin.configs.recommended
+        ]
+    }
+]);

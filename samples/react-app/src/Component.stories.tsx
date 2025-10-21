@@ -1,18 +1,9 @@
 import type { Meta, StoryObj } from "storybook-react-rsbuild";
+import { Component } from "./Component.tsx";
 
 // TEST SCENARIO:
 // To test CSF: Uncomment // title: "test"
 // To test flat/components: Comment out "export default meta"
-
-interface ComponentProps {
-    text: string;
-}
-
-function Component({ text = "Hello!" }: ComponentProps) {
-    return (
-        <div>{text}</div>
-    );
-}
 
 const meta = {
     // title: "test",
