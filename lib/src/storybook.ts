@@ -9,7 +9,7 @@ export interface StorybookConfigOptions {
 
 export const storybookGlobalIgnores = ["!.storybook"];
 
-export const storybookConfig = (options: StorybookConfigOptions = {}) => {
+export function storybookConfig(options: StorybookConfigOptions = {}) {
     const {
         storiesRules = {},
         mainFileRules = {}

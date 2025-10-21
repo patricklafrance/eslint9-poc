@@ -8,7 +8,7 @@ export interface VitestConfigOptions {
 
 export const vitestGlobalIgnores = [];
 
-export const vitestConfig = (options: VitestConfigOptions = {}) => {
+export function vitestConfig(options: VitestConfigOptions = {}) {
     const {
         rules = {}
     } = options;

@@ -8,7 +8,7 @@ export interface YamlConfigOptions {
 
 export const yamlGlobalIgnores = [];
 
-export const yamlConfig = (options: YamlConfigOptions = {}) => {
+export function yamlConfig(options: YamlConfigOptions = {}) {
     const {
         rules = {}
     } = options;

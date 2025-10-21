@@ -6,8 +6,7 @@
     "type": "module",
     "license": "Apache-2.0",
     "scripts": {
-        "dev": "",
-        "build": "",
+        "eslint": "eslint . --ignore-pattern lib --ignore-pattern samples --max-warnings=-0 --cache --cache-location node_modules/.cache/eslint",
         "clean": "pnpm -r --parallel --include-workspace-root exec pnpx rimraf dist .turbo .rslib node_modules/.cache",
         "reset": "pnpm clean && pnpm reset:modules",
         "reset:modules": "pnpm -r --parallel --include-workspace-root exec pnpx rimraf node_modules pnpm-lock.yaml",
@@ -15,8 +14,12 @@
         "update-outdated-deps": "pnpm update -r --latest"
     },
     "devDependencies": {
+        "@eslint/js": "9.38.0",
+        "@lib/eslint-shared-configs": "workspace:*",
         "@workleap/typescript-configs": "3.0.4",
-        "typescript": "5.9.3"
+        "eslint": "9.38.0",
+        "typescript": "5.9.3",
+        "typescript-eslint": "8.46.1"
     },
     "engines": {
         "node": ">=22.0.0",

@@ -9,7 +9,7 @@ export interface TestingLibraryConfigOptions {
 
 export const testingLibraryGlobalIgnores = [];
 
-export const testingLibraryConfig = (options: TestingLibraryConfigOptions = {}) => {
+export function testingLibraryConfig(options: TestingLibraryConfigOptions = {}) {
     const {
         reactRules = {},
         jsRules = {}

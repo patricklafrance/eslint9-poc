@@ -8,7 +8,7 @@ export interface JsxAllyConfigOptions {
 
 export const jsxAllyGlobalIgnores = [];
 
-export const jsxAllyConfig = (options: JsxAllyConfigOptions = {}) => {
+export function jsxAllyConfig(options: JsxAllyConfigOptions = {}) {
     const {
         rules = {}
     } = options;

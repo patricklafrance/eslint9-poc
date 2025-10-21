@@ -9,7 +9,7 @@ export interface JestConfigOptions {
 
 export const jestGlobalIgnores = [];
 
-export const jestConfig = (options: JestConfigOptions = {}) => {
+export function jestConfig(options: JestConfigOptions = {}) {
     const {
         rules = {}
     } = options;

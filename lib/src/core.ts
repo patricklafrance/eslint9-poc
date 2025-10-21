@@ -10,9 +10,9 @@ export interface CoreConfigOptions {
 
 export const coreGlobalIgnores = [];
 
-export const coreConfig = (options: CoreConfigOptions = {}) => {
+export function coreConfig(options: CoreConfigOptions = {}) {
     const {
-        rules = {}
+        rules
     } = options;
 
     return [{

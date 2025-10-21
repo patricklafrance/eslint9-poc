@@ -9,7 +9,7 @@ export interface ReactConfigOptions {
 
 export const reactGlobalIgnores = [];
 
-export const reactConfig = (options: ReactConfigOptions = {}) => {
+export function reactConfig(options: ReactConfigOptions = {}) {
     const {
         rules = {}
     } = options;

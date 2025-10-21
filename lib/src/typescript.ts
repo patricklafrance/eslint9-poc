@@ -10,7 +10,7 @@ export interface TypescriptConfigOptions {
 
 export const typescriptGlobalIgnores = [];
 
-export const typescriptConfig = (options: TypescriptConfigOptions = {}) => {
+export function typescriptConfig(options: TypescriptConfigOptions = {}) {
     const {
         rules = {}
     } = options;

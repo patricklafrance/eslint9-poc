@@ -8,7 +8,7 @@ export interface PackageJsonConfigOptions {
 
 export const packageJsonGlobalIgnores = [];
 
-export const packageJsonConfig = (options: PackageJsonConfigOptions = {}) => {
+export function packageJsonConfig(options: PackageJsonConfigOptions = {}) {
     const {
         rules = {}
     } = options;
@@ -32,6 +32,7 @@ export const packageJsonConfig = (options: PackageJsonConfigOptions = {}) => {
                     "config"
                 ]
             ],
+            "package-json/valid-scripts": "off",
             // Doesn't support "workspace:*" at the moment.
             "package-json/valid-package-def": "off",
             // I am not sure why, this rule is triggering errors for valid paths.
